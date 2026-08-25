@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>IM WAKE UP - Roleta de Maquiagem</title>
+
+<style>
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background:
+        radial-gradient(circle at top, #ff7ac8 0%, #170018 45%, #070007 100%);
+    min-height: 100vh;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow-x: hidden;
+}
+
+.container {
+    width: 100%;
+    max-width: 480px;
+    padding: 18px;
+}
+
+/* LOGO */
+
+.logo {
+    text-align: center;
+    margin-bottom: 18px;
+}
+
+.logo h1 {
+    font-size: 38px;
+    font-weight: 900;
+    letter-spacing: 3px;
+    text-shadow:
+        0 0 8px #ff4dc4,
+        0 0 20px #ff1cb5,
+        0 0 35px #ff1cb5;
+}
+
+.logo p {
+    color: #ffc8ee;
+    font-size: 13px;
+    margin-top: 4px;
+}
+
+/* SALDO */
+
+.balance {
+    background: rgba(0,0,0,.55);
+    border: 1px solid #ff4dc4;
+    box-shadow: 0 0 20px rgba(255,0,180,.3);
+    border-radius: 15px;
+    padding: 13px 18px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 18px;
+}
+
+.balance span {
+    color: #aaa;
+    font-size: 13px;
+}
+
+.balance strong {
+    color: #fff;
+    font-size: 20px;
+}
+
+/* JOGO */
+
+.game {
+    background: linear-gradient(145deg, #260026, #0d000d);
+    border: 2px solid #ff48c4;
+    border-radius: 25px;
+    padding: 20px;
+    box-shadow:
+        0 0 25px rgba(255, 0, 200, .35),
+        inset 0 0 30px rgba(255, 0, 200, .08);
+}
+
+.title {
+    text-align: center;
+    margin-bottom: 18px;
+}
+
+.title h2 {
+    font-size: 22px;
+}
+
+.title p {
+    color: #d9a5cc;
+    font-size: 12px;
+    margin-top: 5px;
+}
+
+/* SLOT MACHINE */
+
+.machine {
+    position: relative;
+    background: #080008;
+    border-radius: 20px;
+    padding: 15px;
+    border: 2px solid #70145e;
+    box-shadow: inset 0 0 25px #000;
+}
+
+.machine::before {
+    content: "";
+    position: absolute;
+    top: -5px;
+    left: 15%;
+    right: 15%;
+    height: 5px;
+    background: #ff52cb;
+    border-radius: 10px;
+    box-shadow: 0 0 15px #ff52cb;
+}
+
+.slots {
+    display: flex;
+    gap: 9px;
+    justify-content: center;
+}
+
+.slot {
+    width: 31%;
+    height: 115px;
+    background:
+        linear-gradient(145deg, #391237, #100010);
+    border: 2px solid #9d2c88;
+    border-radius: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 55px;
+    box-shadow:
+        inset 0 0 20px #000,
+        0 0 10px rgba(255, 0, 200, .15);
+    overflow: hidden;
+}
+
+.slot.spinning {
+    animation: slotShake .12s infinite;
+}
+
+@keyframes slotShake {
+    0% {
+        transform: translateY(-5px);
+    }
+
+    50% {
+        transform: translateY(5px);
+    }
+
+    100% {
+        transform: translateY(-5px);
+    }
+}
+
+/* LINHA DE GANHO */
+
+.win-line {
+    height: 3px;
+    background: #ff42c5;
+    box-shadow: 0 0 12px #ff42c5;
+    margin: 8px 10px;
+    opacity: .4;
+}
+
+/* APOSTA */
+
+.bet-area {
+    margin-top: 20px;
+}
+
+.bet-label {
+    color: #cfa6c8;
+    font-size: 13px;
+    margin-bottom: 7px;
+}
+
+.bet-controls {
+    display: flex;
+    gap: 8px;
+}
+
+.bet-controls button {
+    width: 45px;
+    border: none;
+    border-radius: 10px;
+    background: #32102e;
+    color: white;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+.bet-controls input {
+    flex: 1;
+    background: #10000f;
+    border: 1px solid #6e2762;
+    border-radius: 10px;
+    color: white;
+    text-align: center;
+    font-size: 17px;
+}
+
+/* BOTÃO */
+
+.spin {
+    width: 100%;
+    margin-top: 18px;
+    padding: 17px;
+    border: none;
+    border-radius: 14px;
+    background:
+        linear-gradient(90deg, #ff159f, #ff55cf, #ff159f);
+    background-size: 200% auto;
+    color: white;
+    font-size: 19px;
+    font-weight: 900;
+    cursor: pointer;
+    box-shadow:
+        0 0 20px rgba(255, 0, 190, .5);
+    transition: .2s;
+}
+
+.spin:hover {
+    transform: scale(1.02);
+}
+
+.spin:disabled {
+    opacity: .5;
+    cursor: not-allowed;
+}
+
+.spin.animate {
+    animation: buttonGlow 1s infinite;
+}
+
+@keyframes buttonGlow {
+    0%,100% {
+        box-shadow: 0 0 15px #ff159f;
+    }
+
+    50% {
+        box-shadow: 0 0 35px #ff159f;
+    }
+}
+
+/* MENSAGEM */
+
+.message {
+    text-align: center;
+    min-height: 28px;
+    margin-top: 17px;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.message.win {
+    color: #ff8bdd;
+    text-shadow: 0 0 12px #ff26bd;
+}
+
+.message.lose {
+    color: #c9a7c5;
+}
+
+/* PRÊMIO */
+
+.prize {
+    display: none;
+    margin-top: 15px;
+    text-align: center;
+    background: rgba(255, 0, 170, .1);
+    border: 1px solid #ff4dc4;
+    border-radius: 15px;
+    padding: 15px;
+}
+
+.prize.show {
+    display: block;
+    animation: prizeAppear .6s ease;
+}
+
+.prize .big {
+    font-size: 45px;
+    margin-bottom: 5px;
+}
+
+.prize strong {
+    color: #ff9cdd;
+}
+
+@keyframes prizeAppear {
+    from {
+        opacity: 0;
+        transform: scale(.6);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* CONFETES */
+
+.confetti {
+    position: fixed;
+    width: 8px;
+    height: 14px;
+    top: -20px;
+    z-index: 999;
+    animation: fall linear forwards;
+}
+
+@keyframes fall {
+    to {
+        transform:
+            translateY(110vh)
+            rotate(720deg);
+    }
+}
+
+/* REGRAS */
+
+.rules {
+    margin-top: 18px;
+    text-align: center;
+    color: #a98aa4;
+    font-size: 11px;
+    line-height: 1.5;
+}
+
+.rules b {
+    color: #ff8bd8;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="logo">
+        <h1>IM WAKE UP</h1>
+        <p>MAKEUP • SPIN • WIN</p>
+    </div>
+
+    <div class="balance">
+        <div>
+            <span>Saldo fictício</span><br>
+            <strong id="balance">R$ 100,00</strong>
+        </div>
+
+        <div style="text-align:right">
+            <span>Prêmios</span><br>
+            <strong id="wins">0</strong>
+        </div>
+    </div>
+
+    <div class="game">
+
+        <div class="title">
+            <h2>💄 Makeup Roulette</h2>
+            <p>Combine 3 maquiagens iguais e ganhe o prêmio!</p>
+        </div>
+
+        <div class="machine">
+
+            <div class="slots">
+
+                <div class="slot" id="slot1">💄</div>
+
+                <div class="slot" id="slot2">💋</div>
+
+                <div class="slot" id="slot3">💅</div>
+
+            </div>
+
+            <div class="win-line"></div>
+
+        </div>
+
+        <div class="bet-area">
+
+            <div class="bet-label">
+                Valor da rodada
+            </div>
+
+            <div class="bet-controls">
+
+                <button onclick="changeBet(-5)">−</button>
+
+                <input
+                    id="bet"
+                    type="number"
+                    value="5"
+                    min="1"
+                    step="1"
+                >
+
+                <button onclick="changeBet(5)">+</button>
+
+            </div>
+
+        </div>
+
+        <button
+            id="spinButton"
+            class="spin"
+            onclick="spin()"
+        >
+            🎰 GIRAR
+        </button>
+
+        <div id="message" class="message">
+            Boa sorte! 💄
+        </div>
+
+        <div id="prize" class="prize">
+
+            <div class="big">💄✨</div>
+
+            <div>
+                Você ganhou uma
+                <strong>MAQUIAGEM!</strong>
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="rules">
+        <b>DEMONSTRAÇÃO</b><br>
+        Esta versão utiliza saldo fictício e uma probabilidade
+        configurada de 50% para vitória e 50% para derrota.
+    </div>
+
+</div>
+
+<script>
+
+const symbols = [
+    "💄",
+    "💋",
+    "💅",
+    "👁️",
+    "🧴",
+    "🎀"
+];
+
+let balance = 100;
+let wins = 0;
+let spinning = false;
+
+const slot1 = document.getElementById("slot1");
+const slot2 = document.getElementById("slot2");
+const slot3 = document.getElementById("slot3");
+
+const button = document.getElementById("spinButton");
+const message = document.getElementById("message");
+const prize = document.getElementById("prize");
+
+function changeBet(value) {
+
+    const input = document.getElementById("bet");
+
+    let bet = Number(input.value);
+
+    bet += value;
+
+    if (bet < 1) bet = 1;
+
+    if (bet > balance) bet = balance;
+
+    input.value = bet;
+}
+
+function randomSymbol() {
+
+    return symbols[
+        Math.floor(Math.random() * symbols.length)
+    ];
+}
+
+function sleep(ms) {
+
+    return new Promise(resolve => setTimeout(resolve, ms));
+
+}
+
+function updateBalance() {
+
+    document.getElementById("balance").textContent =
+        "R$ " + balance.toFixed(2).replace(".", ",");
+
+    document.getElementById("wins").textContent = wins;
+
+}
+
+function confetti() {
+
+    for (let i = 0; i < 80; i++) {
+
+        const piece = document.createElement("div");
+
+        piece.className = "confetti";
+
+        piece.style.left =
+            Math.random() * 100 + "vw";
+
+        piece.style.animationDuration =
+            (Math.random() * 2 + 2) + "s";
+
+        piece.style.background =
+            `hsl(${Math.random() * 360}, 100%, 65%)`;
+
+        piece.style.transform =
+            `rotate(${Math.random() * 360}deg)`;
+
+        document.body.appendChild(piece);
+
+        setTimeout(() => {
+
+            piece.remove();
+
+        }, 4500);
+
+    }
+
+}
+
+async function spin() {
+
+    if (spinning) return;
+
+    const betInput = document.getElementById("bet");
+
+    let bet = Number(betInput.value);
+
+    if (!bet || bet <= 0) {
+
+        message.textContent =
+            "Digite um valor válido.";
+
+        return;
+
+    }
+
+    if (bet > balance) {
+
+        message.textContent =
+            "Saldo fictício insuficiente.";
+
+        return;
+
+    }
+
+    spinning = true;
+
+    button.disabled = true;
+
+    button.classList.add("animate");
+
+    prize.classList.remove("show");
+
+    message.className = "message";
+
+    message.textContent = "Girando... 🎰";
+
+    balance -= bet;
+
+    updateBalance();
+
+    slot1.classList.add("spinning");
+    slot2.classList.add("spinning");
+    slot3.classList.add("spinning");
+
+    /*
+        50/50:
+        true  = vitória
+        false = derrota
+    */
+
+    const won = Math.random() < 0.50;
+
+    let finalSymbols;
+
+    if (won) {
+
+        // Vitória: os três símbolos serão iguais
+        const symbol = randomSymbol();
+
+        finalSymbols = [
+            symbol,
+            symbol,
+            symbol
+        ];
+
+    } else {
+
+        // Derrota: garante que não sejam os três iguais
+        finalSymbols = [
+            randomSymbol(),
+            randomSymbol(),
+            randomSymbol()
+        ];
+
+        while (
+            finalSymbols[0] === finalSymbols[1] &&
+            finalSymbols[1] === finalSymbols[2]
+        ) {
+
+            finalSymbols[2] = randomSymbol();
+
+        }
+
+    }
+
+    /*
+        Animação visual.
+        Os símbolos mudam várias vezes antes
+        de revelar o resultado final.
+    */
+
+    let animationTime = 1800;
+
+    let interval = setInterval(() => {
+
+        slot1.textContent = randomSymbol();
+        slot2.textContent = randomSymbol();
+        slot3.textContent = randomSymbol();
+
+    }, 90);
+
+    await sleep(animationTime);
+
+    clearInterval(interval);
+
+    /*
+        Pequena diferença no tempo de parada
+        para parecer uma máquina real.
+    */
+
+    slot1.textContent = finalSymbols[0];
+
+    await sleep(250);
+
+    slot2.textContent = finalSymbols[1];
+
+    await sleep(250);
+
+    slot3.textContent = finalSymbols[2];
+
+    await sleep(300);
+
+    slot1.classList.remove("spinning");
+    slot2.classList.remove("spinning");
+    slot3.classList.remove("spinning");
+
+    if (won) {
+
+        /*
+            Prêmio fictício:
+            devolve a aposta + prêmio.
+        */
+
+        const prizeValue = bet * 2;
+
+        balance += prizeValue;
+
+        wins++;
+
+        message.className = "message win";
+
+        message.textContent =
+            "🎉 VOCÊ GANHOU! 3 IGUAIS! 🎉";
+
+        prize.classList.add("show");
+
+        confetti();
+
+    } else {
+
+        message.className = "message lose";
+
+        message.textContent =
+            "😢 Não foi dessa vez. Tente novamente.";
+
+    }
+
+    updateBalance();
+
+    button.disabled = false;
+
+    button.classList.remove("animate");
+
+    spinning = false;
+
+}
+
+updateBalance();
+
+</script>
+
+</body>
+</html>
